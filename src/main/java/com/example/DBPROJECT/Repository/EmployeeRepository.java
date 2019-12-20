@@ -17,8 +17,8 @@ import java.sql.Date;
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
     @Modifying(clearAutomatically = true)
     @Query(
-            value = "INSERT INTO Employee (EmployeeName, EmployeeSurname, EmployeeEmail, EmployeePassword, EmployeePhone, EmployeeBirthday)" +
-                    "VALUES (:EName, :ESurname, :EEmail , :EPassword, :EPhone, CONVERT(Date, :EBirthday,1))",
+            value = "INSERT INTO Employee (EmployeeName, EmployeeSurname, EmployeeEmail, EmployeePassword, EmployeePhone)" +
+                    "VALUES (:EName, :ESurname, :EEmail , :EPassword, :EPhone)",
             nativeQuery = true)
 
 
@@ -27,8 +27,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
                         @Param("ESurname") String EmployeeSurname,
                         @Param("EEmail") String EmployeeEmail,
                         @Param("EPassword") String EmployeePassword,
-                        @Param("EPhone") String EmployeePhone,
-                        @Param("EBirthday") Date EmployeeBirthday);
+                        @Param("EPhone") String EmployeePhone);
 
 
     @Query(

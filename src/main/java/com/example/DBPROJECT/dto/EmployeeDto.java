@@ -12,23 +12,24 @@ import java.sql.Date;
 @Setter
 @ToString
 public class EmployeeDto {
-    @JsonProperty("EmployeeName")
+    @JsonProperty("employeeName")
     private String EmployeeName;
 
-    @JsonProperty("EmployeeSurname")
+    @JsonProperty("employeeSurname")
     private String EmployeeSurname;
 
-    @JsonProperty("EmployeeEmail")
+    @JsonProperty("employeeEmail")
     private String EmployeeEmail;
 
-    @JsonProperty("EmployeePassword")
+    @JsonProperty("employeePassword")
     private String EmployeePassword;
 
-    @JsonProperty("EmployeePhone")
+    @JsonProperty("employeePhone")
     private String  EmployeePhone;
 
-    @JsonProperty("EmployeeBirthday")
-    private Date EmployeeBirthday;
+  /*  @JsonProperty("EmployeeBirthday")
+    private Date EmployeeBirthday;*/
+
 
 
 }

@@ -15,7 +15,7 @@ public class EmployeeMapper {
         employee.setEmployeePassword(employeeDto.getEmployeePassword());
         employee.setEmployeeName(employeeDto.getEmployeeName());
         employee.setEmployeeSurname(employeeDto.getEmployeeSurname());
-        employee.setEmployeeBirthday(employeeDto.getEmployeeBirthday());
+       // employee.setEmployeeBirthday(employeeDto.getEmployeeBirthday());
         employee.setEmployeePhone(employeeDto.getEmployeePhone());
 
         return employee;

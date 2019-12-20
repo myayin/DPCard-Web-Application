@@ -32,9 +32,9 @@ public class Employee {
 
     private String  EmployeePhone;
 
-    private Date EmployeeBirthday;
+    /*private Date employeeBirthday;
 
-    private int EmployeeAge;
+    private int employeeAge;*/
 
 
 

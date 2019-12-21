@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class ConfirmationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ConfirmationToKenID;
+    private int ConfirmationTokenID;
 
     private int EmployeeID;
 
@@ -22,7 +22,7 @@ public class ConfirmationToken {
 
     private String TokenStatus;
 
-    private Timestamp CreateDate;
+    //private Timestamp CreateDate;
 
 
 

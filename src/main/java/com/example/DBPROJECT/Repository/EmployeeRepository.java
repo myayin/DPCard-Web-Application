@@ -17,7 +17,7 @@ import java.sql.Date;
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
     @Modifying(clearAutomatically = true)
     @Query(
-            value = "INSERT INTO Employee (EmployeeName, EmployeeSurname, EmployeeEmail, EmployeePassword, EmployeePhone)" +
+            value = "INSERT INTO employee (employee_name, employee_surname, employee_email, employee_password, employee_phone)" +
                     "VALUES (:EName, :ESurname, :EEmail , :EPassword, :EPhone)",
             nativeQuery = true)
 
@@ -31,25 +31,25 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
 
     @Query(
-            value = "SELECT * FROM E.Employee E WHERE EmployeeEmail = :EEmail ", nativeQuery = true
+            value = "SELECT * FROM employee WHERE employee_email = :EEmail ", nativeQuery = true
     )
 
     Employee findWithMail(@Param("EEmail") String EmployeeEmail);
 
     @Query(
-            value = "SELECT E.EmployeeID FROM Employee E WHERE E.EmployeeEmail = :EEmail ", nativeQuery = true
+            value = "SELECT employeeid FROM employee WHERE employee_email = :EEmail ", nativeQuery = true
     )
 
     int findIDWithEmail(@Param("EEmail") String EmployeeEmail);
 
     @Query(
-            value = "SELECT * FROM Employee E WHERE E.EmployeeID = :EID ", nativeQuery = true
+            value = "SELECT * FROM employee WHERE employeeid = :EID ", nativeQuery = true
     )
 
     Employee findWithID(@Param("EID") int EmployeeID);
 
     @Query(
-            value = "SELECT E.EmployeeEmail FROM Employee E WHERE E.EmployeeID = :EID ", nativeQuery = true
+            value = "SELECT employee_email FROM employee WHERE employeeid = :EID ", nativeQuery = true
     )
 
     String returnEmployeeEmail(@Param("EID") int EmployeeID);

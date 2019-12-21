@@ -11,21 +11,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, String> {
     @Query(
-            value = "SELECT Token FROM ConfirmationToken WHERE EmployeeID :EID", nativeQuery = true
+            value = "SELECT token FROM confirmation_token WHERE employeeid :EID", nativeQuery = true
     )
     String findTokenWithID(@Param("EID") int EmployeeID);
 
 
     @Query(
-            value = "SELECT EmployeeID FROM ConfirmationToken WHERE Token = :token", nativeQuery = true
+            value = "SELECT employeeid FROM confirmation_token WHERE token = :token", nativeQuery = true
     )
    int findEmployeeIDWithToken(@Param("token") String Ctoken);
 
     @Modifying(clearAutomatically = true)
     @Query(
-            value = "update ConfirmationToken c set c.TokenStatus = :status where c.Token = :token"
+          value=  "update confirmation_token  set token_status = :status where token = :token" , nativeQuery = true
     )
-    int updateTokenStatus(@Param("token") String Ctoken,
-                          @Param("status") String staus);
+    void updateTokenStatus(@Param("token") String token,
+                          @Param("status") String status);
 
 }

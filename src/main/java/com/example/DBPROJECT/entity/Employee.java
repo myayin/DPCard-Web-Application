@@ -19,17 +19,17 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int EmployeeID;
-
+    @Column
     private boolean EmployeeStatus;
-
+   @Column
     private String EmployeeName;
-
+    @Column
     private String EmployeeSurname;
-
+    @Column
     private String EmployeeEmail;
-
+    @Column
     private String EmployeePassword;
-
+    @Column
     private String  EmployeePhone;
 
     /*private Date employeeBirthday;

@@ -21,7 +21,7 @@ public class ParkingAreaTransactionHistory {
 
     private int ContractedMerchantID;
 
-    private BigDecimal extension;
+    private BigDecimal Extension;
 
     private Timestamp EntryDate;
 

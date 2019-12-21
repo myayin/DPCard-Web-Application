@@ -22,18 +22,18 @@ public class EmployeeSevice {
 
     public EmployeeResource save(Employee employee) {
 
-       /* Employee existingUser = employeeRepository.findWithMail(employee.getEmployeeEmail());
+        Employee existingUser = employeeRepository.findWithMail(employee.getEmployeeEmail());
 
         if (existingUser != null) {
             throw new RuntimeException("MAIL_ALREADY_EXISTS");
-        }*
-        */
+        }
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         employee.setEmployeePassword(encoder.encode(employee.getEmployeePassword()));
 
         employeeRepository.insertEmployee(employee.getEmployeeName(),
-                employee.getEmployeeSurname(), employee.getEmployeeEmail(), employee.getEmployeePassword(), employee.getEmployeePhone(), employee.getEmployeeBirthday());
-        confirmationTokenService.sendToken(employeeRepository.findIDWithEmail(employee.getEmployeeEmail()), "EMPLOYEE_REGISTER");
+                employee.getEmployeeSurname(), employee.getEmployeeEmail(), employee.getEmployeePassword(), employee.getEmployeePhone());
+     confirmationTokenService.sendToken(employeeRepository.findIDWithEmail(employee.getEmployeeEmail()), "EMPLOYEE_REGISTER");
 
 
         return EmployeeMapper.toResource(employee);

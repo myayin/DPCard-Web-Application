@@ -24,8 +24,9 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/user/register",
-                        "/user/confirm-register",
+                .antMatchers("/employee/register",
+                        "contractedMerchant/register",
+                        "/employee/confirm-register",
                         "/confirmation/send-token",
                         "/error");
     }

@@ -34,7 +34,7 @@ public class ConfirmationTokenService {
         if (type.equals("EMPLOYEE_REGISTER")) {
             mailMessage.setSubject("Email Confirmation");
             mailMessage.setText("To confirm your account, please click here : "
-                    + "http://localhost:8080/user/confirm-register?token="
+                    + "http://localhost:8080/employee/confirm-register?token="
                      + confirmationTokenRepository.findTokenWithID(employeeID));
         }
 

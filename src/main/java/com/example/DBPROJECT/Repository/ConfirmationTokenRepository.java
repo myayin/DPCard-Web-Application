@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, String> {
     @Query(
-            value = "SELECT token FROM confirmation_token WHERE employeeid :EID", nativeQuery = true
+            value = "SELECT token FROM employee left join confirmation_token on employee.employeeid=confirmation_token.employeeid where employee.employee_email= :EID", nativeQuery = true
     )
-    String findTokenWithID(@Param("EID") int EmployeeID);
+    String findTokenWithID(@Param("EID") String EmployeeEmail);
 
 
     @Query(

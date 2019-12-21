@@ -29,13 +29,14 @@ public class ConfirmationTokenService {
         }
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom("payekart34@gmail.com");
         mailMessage.setTo(employeeRepository.returnEmployeeEmail(employeeID));
 
         if (type.equals("EMPLOYEE_REGISTER")) {
             mailMessage.setSubject("Email Confirmation");
             mailMessage.setText("To confirm your account, please click here : "
                     + "http://localhost:8080/employee/confirm-register?token="
-                     + confirmationTokenRepository.findTokenWithID(employeeID));
+                     + confirmationTokenRepository.findTokenWithID(confirmationTokenRepository.findTokenWithID(employeeRepository.returnEmployeeEmail(employeeID))));
         }
 
         try {
@@ -45,7 +46,7 @@ public class ConfirmationTokenService {
         }
 
 
-        return confirmationTokenRepository.findTokenWithID(employeeID);
+        return confirmationTokenRepository.findTokenWithID(confirmationTokenRepository.findTokenWithID(employeeRepository.returnEmployeeEmail(employeeID)));
     }
 
 }

@@ -36,7 +36,7 @@ public class ConfirmationTokenService {
             mailMessage.setSubject("Email Confirmation");
             mailMessage.setText("To confirm your account, please click here : "
                     + "http://localhost:8080/employee/confirm-register?token="
-                     + confirmationTokenRepository.findTokenWithID(confirmationTokenRepository.findTokenWithID(employeeRepository.returnEmployeeEmail(employeeID))));
+                     +confirmationTokenRepository.findTokenWithEmail(employeeRepository.returnEmployeeEmail(employeeID)));
         }
 
         try {
@@ -46,7 +46,7 @@ public class ConfirmationTokenService {
         }
 
 
-        return confirmationTokenRepository.findTokenWithID(confirmationTokenRepository.findTokenWithID(employeeRepository.returnEmployeeEmail(employeeID)));
+        return confirmationTokenRepository.findTokenWithEmail(employeeRepository.returnEmployeeEmail(employeeID));
     }
 
 }

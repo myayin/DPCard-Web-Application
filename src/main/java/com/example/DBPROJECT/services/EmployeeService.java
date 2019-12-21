@@ -1,5 +1,6 @@
 package com.example.DBPROJECT.services;
 
+import com.example.DBPROJECT.Repository.AuthorityRepository;
 import com.example.DBPROJECT.Repository.ConfirmationTokenRepository;
 import com.example.DBPROJECT.Repository.EmployeeRepository;
 import com.example.DBPROJECT.Resource.EmployeeResource;
@@ -8,6 +9,8 @@ import com.example.DBPROJECT.mapper.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EmployeeService {
@@ -18,9 +21,14 @@ public class EmployeeService {
     private ConfirmationTokenRepository confirmationTokenRepository;
 
     @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
     private ConfirmationTokenService confirmationTokenService;
 
     public EmployeeResource save(Employee employee) {
+
+
 
         Employee existingUser = employeeRepository.findWithMail(employee.getEmployeeEmail());
 
@@ -35,7 +43,7 @@ public class EmployeeService {
                 employee.getEmployeeSurname(), employee.getEmployeeEmail(), employee.getEmployeePassword(), employee.getEmployeePhone());
      confirmationTokenService.sendToken(employeeRepository.findIDWithEmail(employee.getEmployeeEmail()), "EMPLOYEE_REGISTER");
 
-
+        authorityRepository.updateAuthority("User",employee.getEmployeeEmail());
         return EmployeeMapper.toResource(employee);
     }
 
@@ -51,7 +59,8 @@ public class EmployeeService {
         return EmployeeMapper.toResource(employee);
     }
 
-  /*  public EmployeeResource addVehicle(String numberPlate, String employeeEmail){
+    public String addVehicle(String numberPlate, String employeeEmail){
+        return "hello";
 
-    }*/
+    }
 }

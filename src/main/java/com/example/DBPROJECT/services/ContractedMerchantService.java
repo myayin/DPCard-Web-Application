@@ -1,5 +1,6 @@
 package com.example.DBPROJECT.services;
 
+import com.example.DBPROJECT.Repository.AuthorityRepository;
 import com.example.DBPROJECT.Repository.ConfirmationTokenRepository;
 import com.example.DBPROJECT.Repository.ContractedMerchantRepository;
 import com.example.DBPROJECT.Repository.EmployeeRepository;
@@ -19,6 +20,9 @@ public class ContractedMerchantService {
     private ContractedMerchantRepository contractedMerchantRepository;
 
     @Autowired
+    AuthorityRepository authorityRepository;
+
+    @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
 
     public ContractedMerchantResource save(ContractedMerchant contractedMerchant) {
@@ -35,7 +39,7 @@ public class ContractedMerchantService {
         contractedMerchantRepository.insertContractedMerchant(contractedMerchant.getCompanyName(),
                 contractedMerchant.getContractedMerchantEmail(), contractedMerchant.getContractedMerchantPassword());
         //   confirmationTokenService.sendToken(employeeRepository.findIDWithEmail(employee.getEmployeeEmail()), "EMPLOYEE_REGISTER");
-
+        authorityRepository.updateAuthority("Merchant",contractedMerchant.getContractedMerchantEmail());
 
         return ContractedMerchantMapper.toResource(contractedMerchant);
     }

@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmployeeSevice {
+public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
@@ -50,4 +50,8 @@ public class EmployeeSevice {
 
         return EmployeeMapper.toResource(employee);
     }
+
+  /*  public EmployeeResource addVehicle(String numberPlate, String employeeEmail){
+
+    }*/
 }

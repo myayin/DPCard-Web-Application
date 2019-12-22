@@ -22,11 +22,10 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
 
     @Autowired
     DataSource dataSource;
+    @Autowired
+    private AuthenticationEntryPoint authEntryPoint;
 
-    private final String USERS_QUERY = "SELECT u.employee_email, " +
-            "u.employee_password, " +
-            "FROM employee AS u " +
-            "WHERE u.employee_email = ? ";
+    private final String USERS_QUERY = "SELECT employee_email, employee_password, employee_status FROM employee WHERE employee.employee_email = ?";
 
     private final String AUTHORITIES_QUERY = "SELECT employee.employee_email, " +
             "authority.authority " +
@@ -40,7 +39,12 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery(USERS_QUERY)
                 .authoritiesByUsernameQuery(AUTHORITIES_QUERY)
                 .passwordEncoder(new BCryptPasswordEncoder());
-    }
+     /*   auth.inMemoryAuthentication()
+                .withUser("tim").password("123").roles("ADMIN")
+                .and()
+                .withUser("joe").password("234").roles("User");*/
+                }
+
 
 
     @Override
@@ -55,31 +59,38 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
              .httpBasic();*/
-        http.authorizeRequests()
+     /*   http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/employee/add_vehicle").permitAll()
-                .antMatchers("/**")
+                //.antMatchers("/vehicle").permitAll()
+                .antMatchers("/vehicle/add")
                 .hasAuthority("USER")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .csrf()
                 .disable()
-                .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error=true")
-                .defaultSuccessUrl("/")
-                .usernameParameter("employeeEmail")
-                .passwordParameter("employeePassword")
+                ;*/
+      /*  http.
+                csrf().disable()
+                .authorizeRequests()
+                .anyRequest().authenticated()
+                .and().httpBasic();*/
+        http.authorizeRequests()
+                .antMatchers("/vehicle/**").hasRole("User")//USER role can access /users/**
+                .antMatchers("/admin/**").hasRole("ADMIN")//ADMIN role can access /admin/**
+                .antMatchers("/quests/**").permitAll()// anyone can access /quests/**
+                .anyRequest().authenticated()//any other request just need authentication
                 .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/")
-                .and()
-                .exceptionHandling()
-                .accessDeniedPage("/access-denied");
+                .formLogin();//enable form login
 
+      /*  http.authorizeRequests().anyRequest().hasAnyRole("ADMIN", "User")
+                .and()
+                .httpBasic(); // Authenticate users with HTTP basic authentication*/
     }
+
+
+
+
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()

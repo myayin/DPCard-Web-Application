@@ -26,10 +26,11 @@ public class EmployeeController {
     public EmployeeResource confirmRegister(@RequestParam("token") String confirmationToken) {
         return employeeService.confirmRegister(confirmationToken);
     }
-   /* @GetMapping("/confirm-register")
-    public EmployeeResource addVehicle(@RequestParam("number-plate") String numberPlate,@RequestParam("employee-email") String employeeEmail ) {
-        return employeeService.addVehicle(numberPlate, employeeEmail);
-    }*/
+
+    @RequestMapping(value="/get-restaurant-history",method = RequestMethod.GET)
+    public List<RestaurantTransactionHistoryResource> getRestaurantHistory(@RequestParam String employeeEmail ){
+        return employeeService.getRestaurantHistory(employeeEmail);
+    }
 
 }
 

@@ -19,4 +19,5 @@ public class ContractedMerchant {
     private String ContractedMerchantEmail;
 
     private String ContractedMerchantPassword;
+
 }

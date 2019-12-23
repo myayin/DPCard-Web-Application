@@ -1,18 +1,22 @@
 package com.example.DBPROJECT.services;
 
-import com.example.DBPROJECT.Repository.AuthorityRepository;
-import com.example.DBPROJECT.Repository.ConfirmationTokenRepository;
-import com.example.DBPROJECT.Repository.ContractedMerchantRepository;
-import com.example.DBPROJECT.Repository.EmployeeRepository;
+import com.example.DBPROJECT.Repository.*;
 import com.example.DBPROJECT.Resource.ContractedMerchantResource;
 import com.example.DBPROJECT.Resource.EmployeeResource;
+import com.example.DBPROJECT.Resource.RestaurantTransactionHistoryResource;
+import com.example.DBPROJECT.controller.ContractedMerchantController;
+import com.example.DBPROJECT.controller.RestaurantTransactionHistoryController;
 import com.example.DBPROJECT.entity.ContractedMerchant;
 import com.example.DBPROJECT.entity.Employee;
+import com.example.DBPROJECT.entity.RestaurantTransactionHistory;
 import com.example.DBPROJECT.mapper.ContractedMerchantMapper;
 import com.example.DBPROJECT.mapper.EmployeeMapper;
+import com.example.DBPROJECT.mapper.RestaurantTransactionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class ContractedMerchantService {
@@ -23,23 +27,64 @@ public class ContractedMerchantService {
     AuthorityRepository authorityRepository;
 
     @Autowired
+    RestaurantTransactionHistoryRepository restaurantTransactionHistoryRepository;
+
+    @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
 
-    public ContractedMerchantResource save(ContractedMerchant contractedMerchant) {
+    @Autowired
+    private  ConfirmationTokenService confirmationTokenService;
 
-       // ContractedMerchant existingContractedMerchant = contractedMerchantRepository.findWithMail(contractedMerchant.getContractedMerchantEmail();
 
-      /*  if (existingContractedMerchant!= null) {
+
+    public ContractedMerchantResource save(ContractedMerchant contractedMerchant, boolean type) {
+
+       ContractedMerchant existingContractedMerchant = contractedMerchantRepository.findMerchantWithEmail(contractedMerchant.getContractedMerchantEmail());
+
+        if (existingContractedMerchant!= null) {
             throw new RuntimeException("MAIL_ALREADY_EXISTS");
-        }*/
+        }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         contractedMerchant.setContractedMerchantPassword(encoder.encode(contractedMerchant.getContractedMerchantPassword()));
 
         contractedMerchantRepository.insertContractedMerchant(contractedMerchant.getCompanyName(),
-                contractedMerchant.getContractedMerchantEmail(), contractedMerchant.getContractedMerchantPassword());
-        //   confirmationTokenService.sendToken(employeeRepository.findIDWithEmail(employee.getEmployeeEmail()), "EMPLOYEE_REGISTER");
-        authorityRepository.updateAuthority("Merchant",contractedMerchant.getContractedMerchantEmail());
+                contractedMerchant.getContractedMerchantEmail(), contractedMerchant.getContractedMerchantPassword(), type);
+         confirmationTokenService.sendToken(contractedMerchantRepository.findIDWithEmail(contractedMerchant.getContractedMerchantEmail()), "MERCHANT_REGISTER");
+        authorityRepository.updateAuthorityForMerchant("Merchant",contractedMerchant.getContractedMerchantEmail());
+
+        return ContractedMerchantMapper.toResource(contractedMerchant);
+    }
+
+    public List<RestaurantTransactionHistoryResource> getRestaurantHistory(String contractedMerchantEmail){
+       List<RestaurantTransactionHistoryResource> transactionHistoryResources = new ArrayList<>() ;
+
+
+        for (RestaurantTransactionHistory restaurantTransactionHistory:restaurantTransactionHistoryRepository.findTransactionWithId(contractedMerchantRepository.findIDWithEmail(contractedMerchantEmail))){
+transactionHistoryResources.add(RestaurantTransactionMapper.toResource(restaurantTransactionHistory));
+transactionHistoryResources.get(transactionHistoryResources.size()-1).setCompanyName(contractedMerchantRepository.getCompanyName(contractedMerchantEmail));
+        }
+
+       return transactionHistoryResources;
+
+    }
+
+   /* public ContractedMerchant chooseInsertHistory(String contractedMerchantEmail){
+        if(!contractedMerchantRepository.getCompanyType(contractedMerchantEmail))
+            contractedMerchantController.getRestaurantHistory(contractedMerchantEmail);
+        else
+    }*/
+
+    public ContractedMerchantResource confirmRegister(String confirmationToken) {
+
+        ContractedMerchant contractedMerchant = contractedMerchantRepository.getMerchantWithID(confirmationTokenRepository.findMerchantIDWithToken(confirmationToken));
+        if (contractedMerchant == null) {
+            throw new RuntimeException("USER_NOT_EXIST");
+        }
+
+        confirmationTokenRepository.updateTokenStatus(confirmationToken, "CONFIRMED");
+        confirmationTokenRepository.confirmMerchant(confirmationToken);
+
 
         return ContractedMerchantMapper.toResource(contractedMerchant);
     }

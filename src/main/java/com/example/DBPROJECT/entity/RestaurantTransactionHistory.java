@@ -23,7 +23,7 @@ public class RestaurantTransactionHistory {
 
     private Timestamp RestaurantTransactionHistoryDate;
 
-    private BigDecimal Extension;
+    private int Extension;
 
     private String RestaurantTransactionHistoryOrder;
 

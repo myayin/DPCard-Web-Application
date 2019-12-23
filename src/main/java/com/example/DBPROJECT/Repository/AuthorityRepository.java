@@ -16,11 +16,27 @@ public interface AuthorityRepository extends JpaRepository<Authority, String> {
 
     @Modifying(clearAutomatically = true)
     @Query(
-            value=  "update authority  set authority = :authorityType from authority left join employee on authority.employeeid =employee.employeeid where employee_email = :employeeEmail" , nativeQuery = true
+            value=  "update authority  set authority = :authorityType " +
+                    "from authority left join employee " +
+                    "on authority.employeeid =employee.employeeid w" +
+                    "here employee_email = :employeeEmail" , nativeQuery = true
     )
+
+
     @Transactional
     void updateAuthority(@Param("authorityType") String authorityType,
                          @Param("employeeEmail") String employeeEmail);
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+            value=  "update authority  set authority = :authorityType from authority left join contracted_merchant on authority.contracted_merchantid =contracted_merchant.contracted_merchantid where contracted_merchant_email = :contractedEmail" , nativeQuery = true
+    )
+
+
+    @Transactional
+    void updateAuthorityForMerchant(@Param("authorityType") String authorityType,
+                         @Param("contractedEmail") String contractedEmail);
+
 
     @Query(
             value = "SELECT authority FROM  employee left join authority " +

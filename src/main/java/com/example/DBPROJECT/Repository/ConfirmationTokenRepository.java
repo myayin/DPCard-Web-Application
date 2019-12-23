@@ -16,11 +16,21 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
     )
     String findTokenWithEmail(@Param("EEmail") String EmployeeEmail);
 
+    @Query(
+            value = "SELECT token FROM contracted_merchant left join confirmation_token on contracted_merchant.contracted_merchantid=confirmation_token.contracted_merchantid where contracted_merchant.contracted_merchant_email= :EEmail", nativeQuery = true
+    )
+    String findTokenWithEmailForMercahnt(@Param("EEmail") String EmployeeEmail);
 
     @Query(
             value = "SELECT employeeid FROM confirmation_token WHERE token = :token", nativeQuery = true
     )
    int findEmployeeIDWithToken(@Param("token") String Ctoken);
+
+    @Query(
+            value = "SELECT contracted_merchantid FROM confirmation_token WHERE token = :token", nativeQuery = true
+    )
+    int findMerchantIDWithToken(@Param("token") String Ctoken);
+
 
     @Modifying(clearAutomatically = true)
     @Query(
@@ -29,5 +39,24 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
     @Transactional
     void updateTokenStatus(@Param("token") String token,
                           @Param("status") String status);
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+            value=  "update employee  set employee_confirmed = '1'  from employee left join confirmation_token where confirmation_token.token = :token" , nativeQuery = true
+    )
+    @Transactional
+    void confirmEmployee(@Param("token") String token);
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+            value=  "update contracted_merchant  set contracted_merchant_confirmed = '1'  " +
+                    "from contracted_merchant " +
+                    "left join confirmation_token " +
+                    "on contracted_merchant.contracted_merchantid=confirmation_token.contracted_merchantid " +
+                    "where token = :token" , nativeQuery = true
+    )
+    @Transactional
+    void confirmMerchant(@Param("token") String token);
+
 
 }

@@ -49,10 +49,6 @@ public class EmployeeController {
 
         employeeService.addVehicleToEmployee(employeeEmail,numberPlate);}
 
-    @RequestMapping(value="/get-merchant",method = RequestMethod.GET)
-    public List<ParkingAreaTransactionHistoryResource> getParkingHistory(@RequestParam String employeeEmail ){
-        return employeeService.getParkingHistory(employeeEmail);
-    }
 
 }
 

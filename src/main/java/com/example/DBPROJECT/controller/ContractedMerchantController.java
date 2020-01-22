@@ -59,21 +59,4 @@ public class ContractedMerchantController {
         return contractedMerchantService.confirmRegister(confirmationToken);
     }
 
-
-
-
-
-
-
-
-
-    /*@RequestMapping(value="/get-restaurant-history",method = RequestMethod.GET)
-    public void chooseHistory(String contractedMerchantEmail){
-        RestaurantTransactionHistoryController.
-    }
-
-    @RequestMapping(value="/get-restaurant-history",method = RequestMethod.GET)
-    public List<RestaurantTransactionHistoryResource> getRestaurantHistory(@RequestParam String contractedMerchantEmail ){
-        return contractedMerchantService.getRestaurantHistory(contractedMerchanttEmail);
-    }*/
 }

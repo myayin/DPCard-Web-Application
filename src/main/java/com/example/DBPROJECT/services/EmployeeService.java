@@ -1,18 +1,19 @@
 package com.example.DBPROJECT.services;
 
-import com.example.DBPROJECT.Repository.AuthorityRepository;
-import com.example.DBPROJECT.Repository.ConfirmationTokenRepository;
-import com.example.DBPROJECT.Repository.EmployeeRepository;
-import com.example.DBPROJECT.Repository.RestaurantTransactionHistoryRepository;
+import com.example.DBPROJECT.Repository.*;
 import com.example.DBPROJECT.Resource.EmployeeResource;
+import com.example.DBPROJECT.Resource.ParkingAreaTransactionHistoryResource;
 import com.example.DBPROJECT.Resource.RestaurantTransactionHistoryResource;
 import com.example.DBPROJECT.entity.Employee;
+import com.example.DBPROJECT.entity.ParkingAreaTransactionHistory;
 import com.example.DBPROJECT.entity.RestaurantTransactionHistory;
 import com.example.DBPROJECT.mapper.EmployeeMapper;
+import com.example.DBPROJECT.mapper.ParkingTransactionMapper;
 import com.example.DBPROJECT.mapper.RestaurantTransactionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,15 @@ public class EmployeeService {
     @Autowired
     private RestaurantTransactionHistoryRepository restaurantTransactionHistoryRepository;
 
+    @Autowired
+    private ParkingAreaTransactionHistoryRepository parkingAreaTransactionHistoryRepository;
+
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private DPCardRepository dpCardRepository;
+
     public EmployeeResource save(Employee employee) {
         Employee existingUser = employeeRepository.findWithMail(employee.getEmployeeEmail());
 
@@ -46,9 +56,9 @@ public class EmployeeService {
 
         employeeRepository.insertEmployee(employee.getEmployeeName(),
                 employee.getEmployeeSurname(), employee.getEmployeeEmail(), employee.getEmployeePassword(), employee.getEmployeePhone());
-     confirmationTokenService.sendToken(employeeRepository.findIDWithEmail(employee.getEmployeeEmail()), "EMPLOYEE_REGISTER");
+        confirmationTokenService.sendToken(employeeRepository.findIDWithEmail(employee.getEmployeeEmail()), "EMPLOYEE_REGISTER");
 
-        authorityRepository.updateAuthority("User",employee.getEmployeeEmail());
+        authorityRepository.updateAuthority("User", employee.getEmployeeEmail());
         return EmployeeMapper.toResource(employee);
     }
 
@@ -75,5 +85,25 @@ public class EmployeeService {
             // transactionHistoryResources.get(transactionHistoryResources.size()-1).setCompanyName(contractedMerchantRepository.getCompanyName(contractedMerchantEmail));
         }
         return transactionHistoryResources;
+    }
+    public List<ParkingAreaTransactionHistoryResource> getParkingHistory(String employeeEmail) {
+        List<ParkingAreaTransactionHistoryResource> parkingAreaTransactionHistoryResources = new ArrayList<>();
+
+
+        for (ParkingAreaTransactionHistory parkingAreaTransactionHistory : parkingAreaTransactionHistoryRepository.findTransactionForEmployee(employeeRepository.findIDWithEmail(employeeEmail))) {
+            parkingAreaTransactionHistoryResources.add(ParkingTransactionMapper.toResource(parkingAreaTransactionHistory));
+            parkingAreaTransactionHistoryResources.get(parkingAreaTransactionHistoryResources.size() - 1).setCompanyName(parkingAreaTransactionHistoryRepository.getCompanyName(parkingAreaTransactionHistory.getParkingAreaTransactionHistoryID()));
+
+        }
+        return parkingAreaTransactionHistoryResources;
+    }
+
+    public void addVehicleToEmployee(String employeeEmail, String numberPlate) {
+        vehicleRepository.updateVehicle(employeeRepository.findIDWithEmail(employeeEmail), numberPlate);
+
+    }
+
+    public int getBalanceParkingCard(String employeeEmail){
+        return dpCardRepository.getBalanceParkingCard(employeeEmail);
     }
 }

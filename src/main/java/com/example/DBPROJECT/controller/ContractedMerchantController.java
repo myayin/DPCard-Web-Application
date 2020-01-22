@@ -2,12 +2,16 @@ package com.example.DBPROJECT.controller;
 
 import com.example.DBPROJECT.Resource.ContractedMerchantResource;
 import com.example.DBPROJECT.Resource.EmployeeResource;
+import com.example.DBPROJECT.Resource.ParkingAreaTransactionHistoryResource;
 import com.example.DBPROJECT.Resource.RestaurantTransactionHistoryResource;
 import com.example.DBPROJECT.dto.ContractedMerchantDto;
 import com.example.DBPROJECT.dto.EmployeeDto;
 import com.example.DBPROJECT.entity.ContractedMerchant;
 import com.example.DBPROJECT.mapper.ContractedMerchantMapper;
 import com.example.DBPROJECT.mapper.EmployeeMapper;
+import com.example.DBPROJECT.services.ContractedMerchantService;
+import com.example.DBPROJECT.services.EmployeeService;
+import com.example.DBPROJECT.mapper.ContractedMerchantMapper;
 import com.example.DBPROJECT.services.ContractedMerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +43,30 @@ public class ContractedMerchantController {
 
     }
 
+
+    @RequestMapping(value="/get-restaurant-history",method = RequestMethod.GET)
+    public List<RestaurantTransactionHistoryResource> getRestaurantHistory(@RequestParam String contractedMerchantEmail ){
+        return contractedMerchantService.getRestaurantHistory(contractedMerchantEmail);
+    }
+
+    @RequestMapping(value="/get-parking-history",method = RequestMethod.GET)
+    public List<ParkingAreaTransactionHistoryResource> getParkingHistory(@RequestParam String contractedMerchantEmail ){
+        return contractedMerchantService.getParkingHistory(contractedMerchantEmail);
+    }
+
+    @GetMapping("/confirm-register")
+    public ContractedMerchantResource confirmRegister(@RequestParam("token") String confirmationToken) {
+        return contractedMerchantService.confirmRegister(confirmationToken);
+    }
+
+
+
+
+
+
+
+
+
     /*@RequestMapping(value="/get-restaurant-history",method = RequestMethod.GET)
     public void chooseHistory(String contractedMerchantEmail){
         RestaurantTransactionHistoryController.
@@ -48,10 +76,4 @@ public class ContractedMerchantController {
     public List<RestaurantTransactionHistoryResource> getRestaurantHistory(@RequestParam String contractedMerchantEmail ){
         return contractedMerchantService.getRestaurantHistory(contractedMerchanttEmail);
     }*/
-
-    @GetMapping("/confirm-register")
-    public ContractedMerchantResource confirmRegister(@RequestParam("token") String confirmationToken) {
-        return contractedMerchantService.confirmRegister(confirmationToken);
-    }
-
 }

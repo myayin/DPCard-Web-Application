@@ -42,7 +42,10 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
 
     @Modifying(clearAutomatically = true)
     @Query(
-            value=  "update employee  set employee_confirmed = '1'  from employee left join confirmation_token where confirmation_token.token = :token" , nativeQuery = true
+            value=  "update employee  set employee_confirmed = '1'  from employee " +
+                    "left join confirmation_token " +
+                    "on employee.employeeid=confirmation_tokenid " +
+                    " where confirmation_token.token = :token" , nativeQuery = true
     )
     @Transactional
     void confirmEmployee(@Param("token") String token);

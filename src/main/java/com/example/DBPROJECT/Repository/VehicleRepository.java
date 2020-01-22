@@ -25,4 +25,12 @@ public interface VehicleRepository extends JpaRepository<Employee, String> {
 
     @Transactional
     void insertVehicle(@Param("numberPlate") String numberPlate);
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+            value=  "update vehicle  set employeeid = :employeeid where number_plate = :numberPlate" , nativeQuery = true
+    )
+    @Transactional
+    void updateVehicle(@Param("employeeid") int employeeid,
+                           @Param("numberPlate") String numberPlate);
 }

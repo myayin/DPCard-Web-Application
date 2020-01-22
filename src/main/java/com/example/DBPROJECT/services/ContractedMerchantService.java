@@ -3,14 +3,14 @@ package com.example.DBPROJECT.services;
 import com.example.DBPROJECT.Repository.*;
 import com.example.DBPROJECT.Resource.ContractedMerchantResource;
 import com.example.DBPROJECT.Resource.EmployeeResource;
+import com.example.DBPROJECT.Resource.ParkingAreaTransactionHistoryResource;
 import com.example.DBPROJECT.Resource.RestaurantTransactionHistoryResource;
 import com.example.DBPROJECT.controller.ContractedMerchantController;
 import com.example.DBPROJECT.controller.RestaurantTransactionHistoryController;
-import com.example.DBPROJECT.entity.ContractedMerchant;
-import com.example.DBPROJECT.entity.Employee;
-import com.example.DBPROJECT.entity.RestaurantTransactionHistory;
+import com.example.DBPROJECT.entity.*;
 import com.example.DBPROJECT.mapper.ContractedMerchantMapper;
 import com.example.DBPROJECT.mapper.EmployeeMapper;
+import com.example.DBPROJECT.mapper.ParkingTransactionMapper;
 import com.example.DBPROJECT.mapper.RestaurantTransactionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,6 +34,10 @@ public class ContractedMerchantService {
 
     @Autowired
     private  ConfirmationTokenService confirmationTokenService;
+
+    @Autowired
+    private ParkingAreaTransactionHistoryRepository parkingAreaTransactionHistoryRepository;
+
 
 
 
@@ -68,12 +72,18 @@ transactionHistoryResources.get(transactionHistoryResources.size()-1).setCompany
        return transactionHistoryResources;
 
     }
+    public List<ParkingAreaTransactionHistoryResource> getParkingHistory(String contractedMerchantEmail){
+        List<ParkingAreaTransactionHistoryResource> parkingAreaTransactionHistoryResources = new ArrayList<>() ;
 
-   /* public ContractedMerchant chooseInsertHistory(String contractedMerchantEmail){
-        if(!contractedMerchantRepository.getCompanyType(contractedMerchantEmail))
-            contractedMerchantController.getRestaurantHistory(contractedMerchantEmail);
-        else
-    }*/
+
+        for (ParkingAreaTransactionHistory parkingAreaTransactionHistory:parkingAreaTransactionHistoryRepository.findTransactionWithId(contractedMerchantRepository.findIDWithEmail(contractedMerchantEmail))){
+            parkingAreaTransactionHistoryResources.add(ParkingTransactionMapper.toResource(parkingAreaTransactionHistory));
+            parkingAreaTransactionHistoryResources.get(parkingAreaTransactionHistoryResources.size()-1).setCompanyName(contractedMerchantRepository.getCompanyName(contractedMerchantEmail));
+        }
+
+        return parkingAreaTransactionHistoryResources;
+
+    }
 
     public ContractedMerchantResource confirmRegister(String confirmationToken) {
 

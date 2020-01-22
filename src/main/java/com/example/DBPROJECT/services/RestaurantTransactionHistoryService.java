@@ -30,7 +30,8 @@ public class RestaurantTransactionHistoryService {
      RestaurantTransactionHistory restaurantTransactionHistory =new RestaurantTransactionHistory();
      restaurantTransactionHistory.setEmployeeID(employeeRepository.findIDWithEmail(restaurantTransactionHistoryDto.getEmployeeEmail()));
      restaurantTransactionHistory.setContractedMerchantID(contractedMerchantRepository.findIDWithEmail(restaurantTransactionHistoryDto.getContractedMerchantEmail()));
-restaurantTransactionHistory.setDPCardID(dpCardRepository.findIdWithEmail(restaurantTransactionHistoryDto.getEmployeeEmail()));
+restaurantTransactionHistory.setDPCardID(dpCardRepository.findIdForRestWithEmail(restaurantTransactionHistoryDto.getEmployeeEmail()));
+
 restaurantTransactionHistory.setExtension(restaurantTransactionHistoryDto.getExtension());
         restaurantTransactionHistoryRepository.insertHistory(restaurantTransactionHistory.getEmployeeID(),restaurantTransactionHistory.getDPCardID(),
                 restaurantTransactionHistory.getContractedMerchantID(), restaurantTransactionHistory.getExtension(),

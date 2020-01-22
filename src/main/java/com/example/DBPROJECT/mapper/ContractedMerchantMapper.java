@@ -7,7 +7,7 @@ import com.example.DBPROJECT.dto.EmployeeDto;
 import com.example.DBPROJECT.entity.ContractedMerchant;
 import com.example.DBPROJECT.entity.Employee;
 
-public interface ContractedMerchantMapper {
+public class ContractedMerchantMapper {
     public static ContractedMerchantResource toResource(ContractedMerchant contractedMerchant) {
         if (contractedMerchant == null) {
             return null;
